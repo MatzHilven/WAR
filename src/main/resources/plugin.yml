@@ -1,0 +1,4 @@
+name: WAR
+version: ${project.version}
+main: me.matzhilven.war.WAR
+authors: [ MatzHilven ]
