@@ -1,4 +1,8 @@
 name: WAR
 version: ${project.version}
-main: me.matzhilven.war.WAR
+main: me.matzhilven.war.WARPlugin
 authors: [ MatzHilven ]
+commands:
+  clan:
+    aliases:
+      - c
