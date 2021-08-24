@@ -1,0 +1,13 @@
+war:
+  max-kills: 10
+  sidebar:
+    title: "&aFFA"
+    lines:
+      - "Kills: %kills%"
+      - "Deaths: %deaths%"
+      - "K/D: %kd%"
+      - "Current Killstreak: %killstreak%"
+      - "Best killstreak: %best_killstreak%"
+      - " "
+      - "%clan_1% - %kills_1%"
+      - "%clan_2% - %kills_2%"

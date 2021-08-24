@@ -1,4 +1,4 @@
-package me.matzhilven.war.commands.subcommands;
+package me.matzhilven.war.commands.subcommands.clan;
 
 import me.matzhilven.war.WARPlugin;
 import me.matzhilven.war.clan.Clan;
@@ -12,11 +12,11 @@ import org.bukkit.entity.Player;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-public class PromoteSubCommand implements SubCommand {
+public class DemoteSubCommand implements SubCommand {
 
     private final WARPlugin main;
 
-    public PromoteSubCommand(WARPlugin main) {
+    public DemoteSubCommand(WARPlugin main) {
         this.main = main;
     }
 
@@ -41,7 +41,7 @@ public class PromoteSubCommand implements SubCommand {
         OfflinePlayer target = Bukkit.getOfflinePlayer(args[1]);
 
         if (target == sender) {
-            StringUtils.sendMessage(sender, main.getMessages().getString("promote-self"));
+            StringUtils.sendMessage(sender, main.getMessages().getString("demote-self"));
             return;
         }
 
@@ -49,21 +49,21 @@ public class PromoteSubCommand implements SubCommand {
 
         if (!clan.getAll().stream().map(UUID::toString).collect(Collectors.toList()).contains(target.getUniqueId().toString())) {
             StringUtils.sendMessage(sender, main.getMessages().getString("not-in-your-clan")
-                    .replace("%player%", target.getName()));
+            .replace("%player%", target.getName()));
             return;
         }
 
-        if (clan.getCoLeaders().stream().map(UUID::toString).collect(Collectors.toList()).contains(target.getUniqueId().toString())) {
-            StringUtils.sendMessage(sender, main.getMessages().getString("already-coleader"));
+        if (!clan.getCoLeaders().stream().map(UUID::toString).collect(Collectors.toList()).contains(target.getUniqueId().toString())) {
+            StringUtils.sendMessage(sender, main.getMessages().getString("not-coleader"));
             return;
         }
 
-        clan.addCoLeader(target.getUniqueId());
+        clan.removeCoLeader(target.getUniqueId());
 
-        StringUtils.sendMessage(sender, main.getMessages().getString("promoted")
+        StringUtils.sendMessage(sender, main.getMessages().getString("demoted")
         .replace("%player%", target.getName()));
         if (target.isOnline()) {
-            StringUtils.sendMessage(target.getPlayer(), main.getMessages().getString("promoted-target"));
+            StringUtils.sendMessage(target.getPlayer(), main.getMessages().getString("demoted-target"));
         }
     }
 

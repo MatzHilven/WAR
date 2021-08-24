@@ -1,23 +1,23 @@
-package me.matzhilven.war.commands.subcommands;
+package me.matzhilven.war.commands.subcommands.clan;
 
 import me.matzhilven.war.WARPlugin;
 import me.matzhilven.war.clan.Clan;
 import me.matzhilven.war.commands.SubCommand;
-import me.matzhilven.war.utils.ClanUtils;
 import me.matzhilven.war.utils.StringUtils;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 
-public class ListSubCommand implements SubCommand {
+public class LeaveSubCommand implements SubCommand {
 
     private final WARPlugin main;
 
-    public ListSubCommand(WARPlugin main) {
+    public LeaveSubCommand(WARPlugin main) {
         this.main = main;
     }
 
     @Override
     public void onCommand(Player sender, Command command, String[] args) {
+
         if (!main.getClanManager().getClan(sender).isPresent()) {
             StringUtils.sendMessage(sender, main.getMessages().getString("not-in-clan"));
             return;
@@ -25,9 +25,15 @@ public class ListSubCommand implements SubCommand {
 
         Clan clan = main.getClanManager().getClan(sender).get();
 
-        StringUtils.sendMessage(sender, main.getMessages().getString("list")
-                .replace("%clan%", clan.getName()));
-        StringUtils.sendMessage(sender, ClanUtils.getMembersFormatted(clan));
+        if (clan.getLeader().toString().equals(sender.getUniqueId().toString())) {
+            StringUtils.sendMessage(sender, main.getMessages().getString("cannot-leave"));
+            return;
+        }
+
+        clan.removeMember(sender, false);
+        StringUtils.sendMessage(sender, main.getMessages().getString("left-player")
+        .replace("%clan%", clan.getName())
+        );
     }
 
     @Override

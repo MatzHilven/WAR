@@ -11,7 +11,7 @@ import java.util.UUID;
 
 public class Clan {
 
-    private final WARPlugin main = WARPlugin.getINSTANCE();
+    private final WARPlugin main = WARPlugin.getPlugin(WARPlugin.class);
 
     private String name;
 
@@ -62,6 +62,10 @@ public class Clan {
         return coLeaders;
     }
 
+    public void setCoLeaders(List<UUID> coLeaders) {
+        this.coLeaders = coLeaders;
+    }
+
     public void addCoLeader(UUID uuid) {
         coLeaders.add(uuid);
         members.remove(uuid);
@@ -70,10 +74,6 @@ public class Clan {
     public void removeCoLeader(UUID uuid) {
         coLeaders.remove(uuid);
         members.add(uuid);
-    }
-
-    public void setCoLeaders(List<UUID> coLeaders) {
-        this.coLeaders = coLeaders;
     }
 
     public List<UUID> getMembers() {

@@ -1,4 +1,4 @@
-package me.matzhilven.war.commands.subcommands;
+package me.matzhilven.war.commands.subcommands.clan;
 
 import me.matzhilven.war.WARPlugin;
 import me.matzhilven.war.clan.Clan;
@@ -12,11 +12,11 @@ import org.bukkit.entity.Player;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-public class CancelInviteSubCommand implements SubCommand {
+public class PromoteSubCommand implements SubCommand {
 
     private final WARPlugin main;
 
-    public CancelInviteSubCommand(WARPlugin main) {
+    public PromoteSubCommand(WARPlugin main) {
         this.main = main;
     }
 
@@ -38,24 +38,33 @@ public class CancelInviteSubCommand implements SubCommand {
             return;
         }
 
-        if (Bukkit.getPlayer(args[1]) == null) {
-            StringUtils.sendMessage(sender, main.getMessages().getString("invalid-player"));
+        OfflinePlayer target = Bukkit.getOfflinePlayer(args[1]);
+
+        if (target == sender) {
+            StringUtils.sendMessage(sender, main.getMessages().getString("promote-self"));
             return;
         }
 
-        OfflinePlayer target = Bukkit.getOfflinePlayer(args[1]);
         Clan clan = main.getClanManager().getOwnedClan(sender).get();
 
-        if (!clan.getInvited().stream().map(UUID::toString).collect(Collectors.toList()).contains(target.getUniqueId().toString())) {
-            StringUtils.sendMessage(sender, main.getMessages().getString("not-invited"));
+        if (!clan.getAll().stream().map(UUID::toString).collect(Collectors.toList()).contains(target.getUniqueId().toString())) {
+            StringUtils.sendMessage(sender, main.getMessages().getString("not-in-your-clan")
+                    .replace("%player%", target.getName()));
             return;
         }
 
-        clan.getInvited().remove(target.getUniqueId());
+        if (clan.getCoLeaders().stream().map(UUID::toString).collect(Collectors.toList()).contains(target.getUniqueId().toString())) {
+            StringUtils.sendMessage(sender, main.getMessages().getString("already-coleader"));
+            return;
+        }
 
-        StringUtils.sendMessage(sender, main.getMessages().getString("removed-invited")
+        clan.addCoLeader(target.getUniqueId());
+
+        StringUtils.sendMessage(sender, main.getMessages().getString("promoted")
         .replace("%player%", target.getName()));
-
+        if (target.isOnline()) {
+            StringUtils.sendMessage(target.getPlayer(), main.getMessages().getString("promoted-target"));
+        }
     }
 
     @Override

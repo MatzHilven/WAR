@@ -1,6 +1,7 @@
 package me.matzhilven.war.commands;
 
 import me.matzhilven.war.WARPlugin;
+import me.matzhilven.war.clan.Clan;
 import me.matzhilven.war.utils.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -46,7 +47,7 @@ public class ClanBaseCommand implements CommandExecutor, TabExecutor {
 
         if (subCommands.get(args[0]).getPermission() != null &&
                 !sender.hasPermission(subCommands.get(args[0]).getPermission())) {
-            StringUtils.sendMessage(sender, "invalid-permissions");
+            StringUtils.sendMessage(sender, main.getMessages().getString("invalid-permissions"));
             return true;
         }
 
@@ -69,9 +70,27 @@ public class ClanBaseCommand implements CommandExecutor, TabExecutor {
                         subCommands.keySet()
                         , new ArrayList<>());
             case 2:
+                if (args[0].equalsIgnoreCase("war")) {
+                    return StringUtil.copyPartialMatches(args[1],
+                    main.getClanManager().getClans().stream().map(Clan::getName).collect(Collectors.toList()),
+                    new ArrayList<>());
+                }
                 cmds.addAll(Bukkit.getOnlinePlayers().stream().map(Player::getName).collect(Collectors.toList()));
                 return StringUtil.copyPartialMatches(args[1], cmds, new ArrayList<>());
-
+            case 3:
+                if (args[0].equalsIgnoreCase("war")) {
+                    return StringUtil.copyPartialMatches(args[2],
+                            main.getClanManager().getClans().stream().map(Clan::getName).collect(Collectors.toList()),
+                            new ArrayList<>());
+                }
+            case 4:
+                if (args[0].equalsIgnoreCase("war")) {
+                    cmds.add("5");
+                    cmds.add("10");
+                    cmds.add("15");
+                    cmds.add("20");
+                    return StringUtil.copyPartialMatches(args[3], cmds, new ArrayList<>());
+                }
         }
 
         return null;

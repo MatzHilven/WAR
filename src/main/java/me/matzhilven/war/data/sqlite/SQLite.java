@@ -1,4 +1,4 @@
-package me.matzhilven.war.sqlite;
+package me.matzhilven.war.data.sqlite;
 
 import me.matzhilven.war.WARPlugin;
 
@@ -64,6 +64,22 @@ public class SQLite extends Database {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-//        initialize();
+
+        try {
+            Statement s = connection.createStatement();
+            String SQLiteCreateTokensTable = "CREATE TABLE IF NOT EXISTS players (" +
+                    "`uuid` varchar(32) NOT NULL," +
+                    "`wins` int(255) NOT NULL," +
+                    "`losses` int(255) NOT NULL," +
+                    "`kills` int(255) NOT NULL," +
+                    "`deaths` int(255) NOT NULL," +
+                    "`killstreak` int(255) NOT NULL," +
+                    "PRIMARY KEY (`uuid`)" +
+                    ");";
+            s.executeUpdate(SQLiteCreateTokensTable);
+            s.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

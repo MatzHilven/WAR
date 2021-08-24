@@ -6,3 +6,4 @@ commands:
   clan:
     aliases:
       - c
+  stats:

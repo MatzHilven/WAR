@@ -1,8 +1,11 @@
-package me.matzhilven.war.sqlite;
+package me.matzhilven.war.data.sqlite;
 
 import me.matzhilven.war.WARPlugin;
 import me.matzhilven.war.clan.Clan;
+import me.matzhilven.war.data.sqlite.player.PlayerData;
+import me.matzhilven.war.data.sqlite.player.SQLitePlayerData;
 import me.matzhilven.war.utils.StringUtils;
+import org.bukkit.entity.Player;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -26,17 +29,7 @@ public abstract class Database {
 
     public abstract void load();
 
-    public void initialize() {
-        connection = getSQLConnection();
-        try {
-            PreparedStatement ps = connection.prepareStatement("SELECT * FROM clans WHERE name=?");
-            ResultSet rs = ps.executeQuery();
-            close(ps, rs);
-        } catch (SQLException ex) {
-            main.getLogger().log(Level.SEVERE, "Unable to retrieve connection", ex);
-        }
-    }
-
+    //  Clan Data
     public Set<Clan> loadClans() {
         Set<Clan> clans = new HashSet<>();
 
@@ -67,7 +60,7 @@ public abstract class Database {
     }
 
     public void saveClan(Clan clan) {
-        if (!exists(clan.getName())) {
+        if (!existsClan(clan.getName())) {
             addClan(clan);
             return;
         }
@@ -116,7 +109,7 @@ public abstract class Database {
     }
 
     public void removeClan(Clan clan) {
-        if (!exists(clan.getName())) return;
+        if (!existsClan(clan.getName())) return;
         try {
             PreparedStatement ps = getSQLConnection().prepareStatement("DELETE FROM clans WHERE name=?");
             ps.setString(1, clan.getName());
@@ -127,10 +120,104 @@ public abstract class Database {
         }
     }
 
-    public boolean exists(String name) {
+    public boolean existsClan(String name) {
         try {
             PreparedStatement ps = getSQLConnection().prepareStatement("SELECT * FROM clans WHERE name=?");
             ps.setString(1, name);
+
+            ResultSet results = ps.executeQuery();
+            return results.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    //  Player Data
+    public void addPlayer(Player player) {
+        SQLitePlayerData playerData = new SQLitePlayerData();
+        playerData.setUUID(player.getUniqueId().toString());
+        if (!(existsPlayer(player.getUniqueId()))) {
+            try {
+                PreparedStatement ps = getSQLConnection().prepareStatement("INSERT INTO players " +
+                        "(uuid,wins,losses,kills,deaths,killstreak) " +
+                        "VALUES (?,?,?,?,?,?)");
+
+                ps.setString(1, player.getUniqueId().toString());
+                ps.setInt(2, playerData.getWins());
+                ps.setInt(3, playerData.getLosses());
+                ps.setInt(4, playerData.getKills());
+                ps.setInt(5, playerData.getDeaths());
+                ps.setInt(6, playerData.getBestKillStreak());
+
+                ps.executeUpdate();
+            } catch (SQLException ex) {
+                main.getLogger().log(Level.SEVERE, "Couldn't execute MySQL statement: ", ex);
+            }
+        } else {
+            try {
+                PreparedStatement ps = getSQLConnection().prepareStatement("SELECT * FROM players WHERE uuid=?");
+                ps.setString(1, player.getUniqueId().toString());
+
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()) {
+                    if (rs.getString("uuid").equalsIgnoreCase(player.getUniqueId().toString())) {
+                        playerData.setWins(rs.getInt("wins"));
+                        playerData.setLosses(rs.getInt("losses"));
+                        playerData.setKills(rs.getInt("kills"));
+                        playerData.setDeaths(rs.getInt("deaths"));
+                        playerData.setBestKillStreak(rs.getInt("killstreak"));
+                    }
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        PlayerData.get().put(player.getUniqueId(), playerData);
+    }
+
+    public void savePlayer(Player player) {
+        SQLitePlayerData playerData = PlayerData.get(player.getUniqueId());
+
+        try {
+            PreparedStatement ps = getSQLConnection().prepareStatement("UPDATE players SET " +
+                    "uuid=?,wins=?,losses=?,kills=?,deaths=?,killstreak=? " +
+                    "WHERE uuid=?");
+            ps.setString(1, player.getUniqueId().toString());
+            ps.setInt(2, playerData.getWins());
+            ps.setInt(3, playerData.getLosses());
+            ps.setInt(4, playerData.getKills());
+            ps.setInt(5, playerData.getDeaths());
+            ps.setInt(6, playerData.getBestKillStreak());
+            ps.setString(7, player.getUniqueId().toString());
+
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            main.getLogger().log(Level.SEVERE, "Couldn't execute MySQL statement: ", ex);
+        }
+    }
+
+    public void savePlayers() {
+        main.getServer().getOnlinePlayers().forEach(this::savePlayer);
+    }
+
+    public void removePlayer(Player player) {
+        if (!existsPlayer(player.getUniqueId())) return;
+        try {
+            PreparedStatement ps = getSQLConnection().prepareStatement("DELETE FROM players WHERE uuid=?");
+            ps.setString(1, player.getUniqueId().toString());
+
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            main.getLogger().log(Level.SEVERE, "Couldn't execute MySQL statement: ", ex);
+        }
+    }
+
+    public boolean existsPlayer(UUID uuid) {
+        try {
+            PreparedStatement ps = getSQLConnection().prepareStatement("SELECT * FROM players WHERE uuid=?");
+            ps.setString(1, uuid.toString());
 
             ResultSet results = ps.executeQuery();
             return results.next();

@@ -1,4 +1,4 @@
-package me.matzhilven.war.commands.subcommands;
+package me.matzhilven.war.commands.subcommands.clan;
 
 import me.matzhilven.war.WARPlugin;
 import me.matzhilven.war.clan.Clan;

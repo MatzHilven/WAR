@@ -1,4 +1,4 @@
-package me.matzhilven.war.commands.subcommands;
+package me.matzhilven.war.commands.subcommands.clan;
 
 import me.matzhilven.war.WARPlugin;
 import me.matzhilven.war.clan.Clan;
@@ -7,14 +7,11 @@ import me.matzhilven.war.utils.StringUtils;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 
-import java.util.UUID;
-import java.util.stream.Collectors;
-
-public class JoinSubCommand implements SubCommand {
+public class CreateSubCommand implements SubCommand {
 
     private final WARPlugin main;
 
-    public JoinSubCommand(WARPlugin main) {
+    public CreateSubCommand(WARPlugin main) {
         this.main = main;
     }
 
@@ -31,21 +28,16 @@ public class JoinSubCommand implements SubCommand {
             return;
         }
 
-        if (!main.getClanManager().getClanByName(args[1]).isPresent()) {
-            StringUtils.sendMessage(sender, main.getMessages().getString("invalid-clan"));
+        if (main.getClanManager().getClanByName(args[0]).isPresent()) {
+            StringUtils.sendMessage(sender, main.getMessages().getString("already-taken"));
             return;
         }
 
-        Clan clan = main.getClanManager().getClanByName(args[1]).get();
+        Clan clan = new Clan(args[1], sender.getUniqueId());
+        main.getClanManager().addClan(clan);
 
-        if (!clan.getInvited().stream().map(UUID::toString).collect(Collectors.toList()).contains(sender.getUniqueId().toString())) {
-            StringUtils.sendMessage(sender, main.getMessages().getString("not-invited"));
-            return;
-        }
-
-        clan.addMember(sender);
-
-        clan.getInvited().remove(sender.getUniqueId());
+        StringUtils.sendMessage(sender, main.getMessages().getString("created-clan")
+        .replace("%clan%", args[1]));
     }
 
     @Override

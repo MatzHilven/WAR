@@ -2,10 +2,15 @@ package me.matzhilven.war;
 
 import me.matzhilven.war.clan.ClanManager;
 import me.matzhilven.war.commands.ClanBaseCommand;
-import me.matzhilven.war.commands.subcommands.*;
+import me.matzhilven.war.commands.subcommands.StatsCommand;
+import me.matzhilven.war.commands.subcommands.clan.*;
+import me.matzhilven.war.commands.subcommands.war.EndWarSubCommand;
+import me.matzhilven.war.commands.subcommands.war.WarInfoSubCommand;
+import me.matzhilven.war.commands.subcommands.war.WarSubCommand;
+import me.matzhilven.war.data.sqlite.Database;
+import me.matzhilven.war.data.sqlite.SQLite;
 import me.matzhilven.war.listeners.PlayerListeners;
-import me.matzhilven.war.sqlite.Database;
-import me.matzhilven.war.sqlite.SQLite;
+import me.matzhilven.war.war.War;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -17,23 +22,17 @@ import java.io.IOException;
 
 public final class WARPlugin extends JavaPlugin {
 
-    private static WARPlugin INSTANCE;
-
     private FileConfiguration messages;
     private ClanManager clanManager;
     private Database db;
 
-    public static WARPlugin getINSTANCE() {
-        return INSTANCE;
-    }
+    private War currentWar;
 
     @Override
     public void onEnable() {
-        INSTANCE = this;
-
         createFiles();
 
-        db = new SQLite(this, "clandata");
+        db = new SQLite(this, "data");
         db.load();
 
         clanManager = new ClanManager(this);
@@ -44,18 +43,20 @@ public final class WARPlugin extends JavaPlugin {
 
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, () -> {
             this.getDb().saveClans();
-        }, 20L * 60L, 20L * 60L);
+            this.getDb().savePlayers();
+        }, 20L * 60L * 5L, 20L * 60L * 5L);
     }
 
     @Override
     public void onDisable() {
         db.saveClans();
+        db.savePlayers();
     }
 
     private void createFiles() {
         saveDefaultConfig();
 
-        File messagesF = new File( getDataFolder(), "messages.yml");
+        File messagesF = new File(getDataFolder(), "messages.yml");
 
         if (!messagesF.exists()) {
             messagesF.getParentFile().mkdir();
@@ -87,6 +88,12 @@ public final class WARPlugin extends JavaPlugin {
         cmd.registerSubCommand("list", new ListSubCommand(this));
         cmd.registerSubCommand("promote", new PromoteSubCommand(this));
         cmd.registerSubCommand("stats", new StatsSubCommand(this));
+
+        cmd.registerSubCommand("war", new WarSubCommand(this));
+        cmd.registerSubCommand("warinfo", new WarInfoSubCommand(this));
+        cmd.registerSubCommand("endwar", new EndWarSubCommand(this));
+
+        new StatsCommand(this);
     }
 
     public ClanManager getClanManager() {
@@ -99,5 +106,13 @@ public final class WARPlugin extends JavaPlugin {
 
     public FileConfiguration getMessages() {
         return messages;
+    }
+
+    public void setCurrentWar(War currentWar) {
+        this.currentWar = currentWar;
+    }
+
+    public War getCurrentWar() {
+        return currentWar;
     }
 }

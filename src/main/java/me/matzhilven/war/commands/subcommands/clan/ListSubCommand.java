@@ -1,23 +1,23 @@
-package me.matzhilven.war.commands.subcommands;
+package me.matzhilven.war.commands.subcommands.clan;
 
 import me.matzhilven.war.WARPlugin;
 import me.matzhilven.war.clan.Clan;
 import me.matzhilven.war.commands.SubCommand;
+import me.matzhilven.war.utils.ClanUtils;
 import me.matzhilven.war.utils.StringUtils;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 
-public class LeaveSubCommand implements SubCommand {
+public class ListSubCommand implements SubCommand {
 
     private final WARPlugin main;
 
-    public LeaveSubCommand(WARPlugin main) {
+    public ListSubCommand(WARPlugin main) {
         this.main = main;
     }
 
     @Override
     public void onCommand(Player sender, Command command, String[] args) {
-
         if (!main.getClanManager().getClan(sender).isPresent()) {
             StringUtils.sendMessage(sender, main.getMessages().getString("not-in-clan"));
             return;
@@ -25,8 +25,9 @@ public class LeaveSubCommand implements SubCommand {
 
         Clan clan = main.getClanManager().getClan(sender).get();
 
-        clan.removeMember(sender, false);
-        StringUtils.sendMessage(sender, main.getMessages().getString("left-player"));
+        StringUtils.sendMessage(sender, main.getMessages().getString("list")
+                .replace("%clan%", clan.getName()));
+        StringUtils.sendMessage(sender, ClanUtils.getMembersFormatted(clan));
     }
 
     @Override
