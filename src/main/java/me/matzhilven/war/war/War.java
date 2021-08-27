@@ -4,8 +4,7 @@ import dev.jcsoftware.jscoreboards.JPerPlayerMethodBasedScoreboard;
 import dev.jcsoftware.jscoreboards.JScoreboardTeam;
 import me.matzhilven.war.WARPlugin;
 import me.matzhilven.war.clan.Clan;
-import me.matzhilven.war.data.sqlite.player.PlayerData;
-import me.matzhilven.war.data.sqlite.player.SQLitePlayerData;
+import me.matzhilven.war.data.PlayerData;
 import me.matzhilven.war.data.temp.LocalPlayerData;
 import me.matzhilven.war.data.temp.TempPlayerData;
 import me.matzhilven.war.utils.StringUtils;
@@ -219,7 +218,7 @@ public class War extends BukkitRunnable {
 
         players.forEach(player -> {
             LocalPlayerData localPlayerData = TempPlayerData.get(player.getUniqueId());
-            SQLitePlayerData data = PlayerData.get(player.getUniqueId());
+            PlayerData data = PlayerData.get(player.getUniqueId());
 
             if (winner.getAll().contains(player.getUniqueId())) {
                 data.setWins(data.getWins() + 1);

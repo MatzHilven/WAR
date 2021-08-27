@@ -1,6 +1,8 @@
-package me.matzhilven.war.data.sqlite.player;
+package me.matzhilven.war.data.mysql;
 
-public class SQLitePlayerData implements PlayerData {
+import me.matzhilven.war.data.PlayerData;
+
+public class MySQLPlayerData implements PlayerData {
 
     private String UUID;
 
@@ -76,16 +78,5 @@ public class SQLitePlayerData implements PlayerData {
             return String.format("%.2f", (float) kills);
         }
         return String.format("%.2f", (float) kills / deaths);
-    }
-
-    @Override
-    public String toString() {
-        return "SQLitePlayerData{" +
-                "wins=" + wins +
-                ", losses=" + losses +
-                ", kills=" + kills +
-                ", deaths=" + deaths +
-                ", bestKillStreak=" + bestKillStreak +
-                '}';
     }
 }

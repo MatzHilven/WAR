@@ -16,3 +16,11 @@ war:
 spawn-gui:
   name: "&cChoose spawn location"
   slots: 27
+
+mysql:
+  enabled: false
+  host: "127.0.0.1"
+  port: 3306
+  database: "data"
+  username: "username"
+  password: "password"

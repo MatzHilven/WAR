@@ -14,10 +14,12 @@ import me.matzhilven.war.commands.subcommands.spawn.RemoveSpawnSubCommand;
 import me.matzhilven.war.commands.subcommands.war.EndWarSubCommand;
 import me.matzhilven.war.commands.subcommands.war.WarInfoSubCommand;
 import me.matzhilven.war.commands.subcommands.war.WarSubCommand;
-import me.matzhilven.war.data.sqlite.Database;
+import me.matzhilven.war.data.Database;
+import me.matzhilven.war.data.mysql.MySQL;
 import me.matzhilven.war.data.sqlite.SQLite;
 import me.matzhilven.war.listeners.InventoryListeners;
 import me.matzhilven.war.listeners.PlayerListeners;
+import me.matzhilven.war.utils.Logger;
 import me.matzhilven.war.war.War;
 import me.matzhilven.war.war.kit.KitManager;
 import me.matzhilven.war.war.spawns.SpawnManager;
@@ -48,15 +50,24 @@ public final class WARPlugin extends JavaPlugin {
     public void onEnable() {
         createFiles();
 
-        db = new SQLite(this, "data");
-        db.load();
+        if (getConfig().getBoolean("mysql.enabled")) {
+            Logger.log("Loading database... (Using MySQL)");
+            db = new MySQL(this);
+            db.load();
+        } else {
+            Logger.log("Loading database... (Using SQLite)");
+            db = new SQLite(this, "data");
+            db.load();
+        }
 
         clanManager = new ClanManager(this);
         kitManager = new KitManager(this);
         spawnManager = new SpawnManager(this);
 
+        Logger.log("Registering commands...");
         registerCommands();
 
+        Logger.log("Registering listeners...");
         new PlayerListeners(this);
         new InventoryListeners(this);
 
@@ -80,6 +91,7 @@ public final class WARPlugin extends JavaPlugin {
         ClanBaseCommand cmd = new ClanBaseCommand(this);
         cmd.registerSubCommand("cancelinvite", new CancelInviteSubCommand(this));
         cmd.registerSubCommand("chat", new ChatSubCommand(this));
+        cmd.registerSubCommand("c", new ChatSubCommand(this));
         cmd.registerSubCommand("create", new CreateSubCommand(this));
         cmd.registerSubCommand("demote", new DemoteSubCommand(this));
         cmd.registerSubCommand("disband", new DisbandSubCommand(this));

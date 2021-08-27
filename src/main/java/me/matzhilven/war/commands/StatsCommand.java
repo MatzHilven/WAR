@@ -1,8 +1,7 @@
 package me.matzhilven.war.commands;
 
 import me.matzhilven.war.WARPlugin;
-import me.matzhilven.war.data.sqlite.player.PlayerData;
-import me.matzhilven.war.data.sqlite.player.SQLitePlayerData;
+import me.matzhilven.war.data.PlayerData;
 import me.matzhilven.war.utils.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -26,7 +25,7 @@ public class StatsCommand implements CommandExecutor {
             if (!(sender instanceof Player)) return true;
             Player p = (Player) sender;
 
-            SQLitePlayerData playerData = PlayerData.get(p.getUniqueId());
+            PlayerData playerData = PlayerData.get(p.getUniqueId());
 
             for (String msg : main.getMessages().getStringList("player-stats")) {
                 msg = msg.replace("%player%", p.getName());
@@ -46,7 +45,7 @@ public class StatsCommand implements CommandExecutor {
 
             OfflinePlayer target = Bukkit.getOfflinePlayer(args[0]);
 
-            SQLitePlayerData playerData = PlayerData.get(target.getUniqueId());
+            PlayerData playerData = PlayerData.get(target.getUniqueId());
 
             for (String msg : main.getMessages().getStringList("player-stats")) {
                 msg = msg.replace("%player%", target.getName());

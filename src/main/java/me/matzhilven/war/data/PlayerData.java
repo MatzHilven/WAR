@@ -1,4 +1,4 @@
-package me.matzhilven.war.data.sqlite.player;
+package me.matzhilven.war.data;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -6,13 +6,13 @@ import java.util.UUID;
 
 public interface PlayerData {
 
-    Map<UUID,SQLitePlayerData> users = new HashMap<>();
+    Map<UUID, PlayerData> users = new HashMap<>();
 
-    static Map<UUID,SQLitePlayerData> get() {
+    static Map<UUID, PlayerData> get() {
         return users;
     }
 
-    static SQLitePlayerData get(UUID uuid) {
+    static PlayerData get(UUID uuid) {
         return users.get(uuid);
     }
 

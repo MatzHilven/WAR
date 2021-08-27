@@ -8,6 +8,8 @@ import me.matzhilven.war.utils.StringUtils;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 
+import java.util.Optional;
+
 public class ListSubCommand implements SubCommand {
 
     private final WARPlugin main;
@@ -18,16 +20,31 @@ public class ListSubCommand implements SubCommand {
 
     @Override
     public void onCommand(Player sender, Command command, String[] args) {
-        if (!main.getClanManager().getClan(sender).isPresent()) {
-            StringUtils.sendMessage(sender, main.getMessages().getString("not-in-clan"));
-            return;
+
+        if (args.length == 1) {
+            if (!main.getClanManager().getClan(sender).isPresent()) {
+                StringUtils.sendMessage(sender, main.getMessages().getString("not-in-clan"));
+                return;
+            }
+
+            Clan clan = main.getClanManager().getClan(sender).get();
+
+            StringUtils.sendMessage(sender, main.getMessages().getString("list")
+                    .replace("%clan%", clan.getName()));
+            StringUtils.sendMessage(sender, ClanUtils.getMembersFormatted(clan));
+
+        } else {
+            Optional<Clan> clan = main.getClanManager().getClanByName(args[1]);
+
+            if (!clan.isPresent()) {
+                StringUtils.sendMessage(sender, main.getMessages().getString("invalid-clan"));
+                return;
+            }
+
+            StringUtils.sendMessage(sender, main.getMessages().getString("list")
+                    .replace("%clan%", clan.get().getName()));
+            StringUtils.sendMessage(sender, ClanUtils.getMembersFormatted(clan.get()));
         }
-
-        Clan clan = main.getClanManager().getClan(sender).get();
-
-        StringUtils.sendMessage(sender, main.getMessages().getString("list")
-                .replace("%clan%", clan.getName()));
-        StringUtils.sendMessage(sender, ClanUtils.getMembersFormatted(clan));
     }
 
     @Override

@@ -1,9 +1,9 @@
-package me.matzhilven.war.data.sqlite;
+package me.matzhilven.war.data;
 
 import me.matzhilven.war.WARPlugin;
 import me.matzhilven.war.clan.Clan;
-import me.matzhilven.war.data.sqlite.player.PlayerData;
-import me.matzhilven.war.data.sqlite.player.SQLitePlayerData;
+import me.matzhilven.war.data.sqlite.SQLitePlayerData;
+import me.matzhilven.war.utils.Logger;
 import me.matzhilven.war.utils.StringUtils;
 import org.bukkit.entity.Player;
 
@@ -19,7 +19,7 @@ import java.util.logging.Level;
 public abstract class Database {
 
     public Connection connection;
-    private WARPlugin main;
+    private final WARPlugin main;
 
     public Database(WARPlugin instance) {
         main = instance;
@@ -47,7 +47,7 @@ public abstract class Database {
                         results.getInt("losses"),
                         results.getInt("kills")
                 );
-
+                Logger.log(" Loaded clan " + clan.getName());
                 clans.add(clan);
             }
 
@@ -178,7 +178,7 @@ public abstract class Database {
     }
 
     public void savePlayer(Player player) {
-        SQLitePlayerData playerData = PlayerData.get(player.getUniqueId());
+        PlayerData playerData = PlayerData.get(player.getUniqueId());
 
         try {
             PreparedStatement ps = getSQLConnection().prepareStatement("UPDATE players SET " +

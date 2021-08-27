@@ -43,7 +43,7 @@ public class ClanBaseCommand implements CommandExecutor, TabExecutor {
         String subCommandString = args[0];
 
         if (!subCommands.containsKey(subCommandString)) {
-            StringUtils.sendMessage(sender, main.getMessages().getString("usage"));
+            StringUtils.sendMessage(sender, main.getMessages().getStringList("usage"));
             return true;
         }
 
@@ -72,7 +72,8 @@ public class ClanBaseCommand implements CommandExecutor, TabExecutor {
                         subCommands.keySet()
                         , new ArrayList<>());
             case 2:
-                if (args[0].equalsIgnoreCase("war")) {
+                if (args[0].equalsIgnoreCase("war") || args[0].equalsIgnoreCase("info")
+                        || args[0].equalsIgnoreCase("list") || args[0].equalsIgnoreCase("stats")) {
                     return StringUtil.copyPartialMatches(args[1],
                             main.getClanManager().getClans().stream().map(Clan::getName).collect(Collectors.toList()),
                             new ArrayList<>());

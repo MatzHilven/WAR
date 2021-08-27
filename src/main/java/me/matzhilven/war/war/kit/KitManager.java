@@ -2,6 +2,7 @@ package me.matzhilven.war.war.kit;
 
 import me.matzhilven.war.WARPlugin;
 import me.matzhilven.war.utils.ConfigUtils;
+import me.matzhilven.war.utils.Logger;
 import me.matzhilven.war.utils.StringUtils;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
@@ -23,6 +24,7 @@ public class KitManager {
         this.kitsF = main.getKits();
         this.kits = new HashSet<>();
 
+        Logger.log("Loading kits...");
         loadKits();
     }
 
@@ -47,6 +49,8 @@ public class KitManager {
             if (kitsF.getString("kits." + kit + ".location") != null) {
                 armorstandKit.setSpawnLocation(ConfigUtils.toLocation(kitsF.getString("kits." + kit + ".location")), false);
             }
+
+            Logger.log(" Loaded kit " + armorstandKit.getNameUncolorized());
 
             kits.add(armorstandKit);
         });

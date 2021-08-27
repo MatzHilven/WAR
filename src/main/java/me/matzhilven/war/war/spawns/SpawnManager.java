@@ -2,6 +2,7 @@ package me.matzhilven.war.war.spawns;
 
 import me.matzhilven.war.WARPlugin;
 import me.matzhilven.war.utils.ConfigUtils;
+import me.matzhilven.war.utils.Logger;
 import org.bukkit.Location;
 import org.bukkit.Material;
 
@@ -20,6 +21,7 @@ public class SpawnManager {
         this.main = main;
         this.spawns = new HashSet<>();
 
+        Logger.log("Loading spawns...");
         loadSpawns();
     }
 
@@ -34,6 +36,7 @@ public class SpawnManager {
                     Material.matchMaterial(main.getSpawns().getString("spawns." + spawn + ".icon")),
                     main.getSpawns().getInt("spawns." + spawn + ".slot"));
 
+            Logger.log(" Loaded spawn " + s.getNameUncolorized());
             spawns.add(s);
         });
     }
@@ -68,6 +71,7 @@ public class SpawnManager {
 
     public Location getRandom() {
         if (spawns.size() == 0) return null;
+        if (spawns.size() == 1) return new ArrayList<>(spawns).get(0).getLocation();
         return new ArrayList<>(spawns).get(ThreadLocalRandom.current().nextInt(spawns.size() - 1)).getLocation();
     }
 }

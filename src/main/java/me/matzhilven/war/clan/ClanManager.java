@@ -1,6 +1,7 @@
 package me.matzhilven.war.clan;
 
 import me.matzhilven.war.WARPlugin;
+import me.matzhilven.war.utils.Logger;
 import org.bukkit.entity.Player;
 
 import java.util.HashSet;
@@ -19,6 +20,7 @@ public class ClanManager {
         this.main = main;
         this.clans = new HashSet<>();
 
+        Logger.log("Loading clans...");
         clans = main.getDb().loadClans();
     }
 
