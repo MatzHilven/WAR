@@ -20,8 +20,6 @@ public class ClanManager {
         this.clans = new HashSet<>();
 
         clans = main.getDb().loadClans();
-
-        clans.forEach(clan -> System.out.println(clan.toString()));
     }
 
     public boolean addClan(Clan clan) {

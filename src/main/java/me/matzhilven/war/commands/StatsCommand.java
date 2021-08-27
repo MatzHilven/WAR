@@ -1,4 +1,4 @@
-package me.matzhilven.war.commands.subcommands;
+package me.matzhilven.war.commands;
 
 import me.matzhilven.war.WARPlugin;
 import me.matzhilven.war.data.sqlite.player.PlayerData;
@@ -39,12 +39,12 @@ public class StatsCommand implements CommandExecutor {
                 StringUtils.sendMessage(p, msg);
             }
         } else {
-            if (Bukkit.getPlayer(args[1]) == null) {
+            if (Bukkit.getPlayer(args[0]) == null) {
                 StringUtils.sendMessage(sender, main.getMessages().getString("invalid-player"));
                 return true;
             }
 
-            OfflinePlayer target = Bukkit.getOfflinePlayer(args[1]);
+            OfflinePlayer target = Bukkit.getOfflinePlayer(args[0]);
 
             SQLitePlayerData playerData = PlayerData.get(target.getUniqueId());
 

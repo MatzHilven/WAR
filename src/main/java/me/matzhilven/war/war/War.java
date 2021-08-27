@@ -1,6 +1,7 @@
 package me.matzhilven.war.war;
 
 import dev.jcsoftware.jscoreboards.JPerPlayerMethodBasedScoreboard;
+import dev.jcsoftware.jscoreboards.JScoreboardTeam;
 import me.matzhilven.war.WARPlugin;
 import me.matzhilven.war.clan.Clan;
 import me.matzhilven.war.data.sqlite.player.PlayerData;
@@ -9,6 +10,7 @@ import me.matzhilven.war.data.temp.LocalPlayerData;
 import me.matzhilven.war.data.temp.TempPlayerData;
 import me.matzhilven.war.utils.StringUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -24,7 +26,10 @@ public class War extends BukkitRunnable {
     private final Clan clan1;
     private final Clan clan2;
     private final int maxKills;
-    private JPerPlayerMethodBasedScoreboard scoreboard;
+    private final JPerPlayerMethodBasedScoreboard scoreboard;
+    private final JScoreboardTeam team1;
+    private final JScoreboardTeam team2;
+
     private int killsClan1;
     private int killsClan2;
 
@@ -34,8 +39,10 @@ public class War extends BukkitRunnable {
     private int time;
 
     public War(Clan clan1, Clan clan2, int maxTime) {
-
         scoreboard = new JPerPlayerMethodBasedScoreboard();
+
+        team1 = scoreboard.createTeam("team1", ChatColor.DARK_BLUE + "[" + clan1.getName() + "] ");
+        team2 = scoreboard.createTeam("team2", ChatColor.DARK_RED + "[" + clan2.getName() + "] ");
 
         players = new ArrayList<>();
 
@@ -60,6 +67,8 @@ public class War extends BukkitRunnable {
             players.add(player);
 
             TempPlayerData.get().put(player.getUniqueId(), playerData);
+
+            team1.addPlayer(player);
         });
 
         clan2.getOnline().forEach(player -> {
@@ -74,9 +83,14 @@ public class War extends BukkitRunnable {
             players.add(player);
 
             TempPlayerData.get().put(player.getUniqueId(), playerData);
+
+            team2.addPlayer(player);
+
         });
 
         players.forEach(this::setupScoreBoard);
+
+        main.getKitManager().spawnKits();
     }
 
     private void setupScoreBoard(Player player) {
@@ -188,7 +202,6 @@ public class War extends BukkitRunnable {
         Clan loser = winner == clan1 ? clan2 : clan1;
 
         for (String msg : main.getMessages().getStringList("war-over")) {
-            System.out.println(msg);
             msg = msg.replace("%winner%", winner.getName());
             msg = msg.replace("%loser%", loser.getName());
             msg = msg.replace("%clan_1%", clan1.getName());
@@ -234,9 +247,15 @@ public class War extends BukkitRunnable {
     public void end() {
         checkWinner();
         players.forEach(player -> {
-            if (player.isOnline()) scoreboard.removePlayer(player);
+            if (player.isOnline()) {
+                scoreboard.removePlayer(player);
+                player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+            }
         });
+
         this.main.setCurrentWar(null);
+
+        main.getKitManager().removeKits();
         this.cancel();
     }
 
@@ -269,5 +288,9 @@ public class War extends BukkitRunnable {
         int seconds = time % 60;
 
         return minutes + "m " + seconds + "s";
+    }
+
+    public boolean shareClan(Player player, Player player1) {
+        return clan1.containsPlayers(player, player1) || clan2.containsPlayers(player, player1);
     }
 }

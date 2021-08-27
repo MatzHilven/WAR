@@ -43,6 +43,18 @@ public class WarSubCommand implements SubCommand {
             return;
         }
 
+        if (clan1.getOnline().size() < main.getConfig().getInt("war.min-members")) {
+            StringUtils.sendMessage(sender, main.getMessages().getString("not-enough-members")
+                    .replace("%clan%", clan1.getName()));
+            return;
+        }
+
+        if (clan2.getOnline().size() < main.getConfig().getInt("war.min-members")) {
+            StringUtils.sendMessage(sender, main.getMessages().getString("not-enough-members")
+                    .replace("%clan%", clan2.getName()));
+            return;
+        }
+
         int time;
 
         try {

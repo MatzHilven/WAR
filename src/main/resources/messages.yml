@@ -22,11 +22,28 @@ usage-admin:
   - "&7/c endwar"
   - "&7/c warinfo"
   - "&7-------------------------------"
+usage-kits:
+  - "&7---------- &d&lWAR &e&lUsage &7----------"
+  - "&7/c kits"
+  - "&7/c createkit <kit>"
+  - "&7/c removekit <kit>"
+  - "&7/c setspawnlocation <kit>"
+  - "&7-------------------------------"
+usage-spawns:
+  - "&7---------- &d&lWAR &e&lUsage &7----------"
+  - "&7/c spawns"
+  - "&7/c addspawn <spawn>"
+  - "&7/c removespawn <spawn>"
+  - "&7-------------------------------"
+
 invalid-permissions: "&cInvalid permissions!"
 invalid-clan: "&cCannot find that clan!"
 invalid-player: "&cCannot find that player!"
 invalid-time: "&cThe specified time isn't valid!"
 invalid-clans: "&cThe 2 war clans cannot be the same!"
+invalid-kit: "&cCannot find that kit!"
+invalid-spawn: "&cCannot find that spawn!"
+
 already-in-clan: "&cYou already are in a clan! Leave your current one to create/join a new one!"
 not-in-clan: "&cYou aren't in a clan!"
 not-in-your-clan: "&c%player% isn't in your clan!"
@@ -62,6 +79,8 @@ chat-off: "&aYou are now in the &lALL &achat!"
 cannot-leave: "&cYou cannot leave your own clan!"
 started-war: "&aSuccessfully started a war between %clan-1% and %clan-2%!"
 already-taken: "&cThat clan name is already taken!"
+not-enough-members: "&cClan %clan% hasn't got enough members online to participate in a war!"
+
 stats:
   - "&d%clan% &eStats"
   - "&aWins: %wins%"
@@ -73,9 +92,12 @@ info:
   - "&eCo-leaders: &7%co_leaders%"
   - "&eMembers: &7%members%"
 list: "&d%clan% &eClan list"
+
 chat-prefix: "&b&lClan &7%player% [%rank%]>> %message%"
+
 ongoing-war: "&cThere is already an active war!"
 no-ongoing-war: "&cThere isn't an active war at the moment!"
+
 player-stats:
   - "&d%player%'s &eStats"
   - "&aWins: %wins%"
@@ -84,6 +106,7 @@ player-stats:
   - "&eTotal deaths: %deaths%"
   - "&eK/D: %kd%"
   - "&eBest killstreak: %killstreak%"
+
 war-over:
   - "&aWar Ended"
   - " "
@@ -98,3 +121,24 @@ war-info:
   - "&e%clan_2% &7(%kills_2%)&e:"
   - "&7%online_2%"
 war-ended: "&aSuccessfully ended the current war!"
+
+added-kit: "&aSuccessfully added kit %kit%!"
+removed-kit: "&aSuccessfully removed kit %kit%!"
+set-location: "&aSet the location of kit %kit%!"
+kits:
+  - "&aKits:"
+  - "&7- &r%kit_1%"
+  - "&7- &r%kit_2%"
+  - "&7- &r%kit_3%"
+  - "&7- &r%kit_4%"
+  - "&7- &r%kit_5%"
+
+added-spawn: "&aSuccessfully added spawn location %spawn%!"
+removed-spawn: "&cSuccessfully removed spawn location %spawn%%!"
+spawns:
+  - "&aSpawns:"
+  - "&7- &r%spawn_1%"
+  - "&7- &r%spawn_2%"
+  - "&7- &r%spawn_3%"
+  - "&7- &r%spawn_4%"
+  - "&7- &r%spawn_5%"

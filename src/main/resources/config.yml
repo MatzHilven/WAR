@@ -1,5 +1,6 @@
 war:
   max-kills: 10
+  min-members: 1
   sidebar:
     title: "&aFFA"
     lines:
@@ -11,3 +12,7 @@ war:
       - " "
       - "%clan_1% - %kills_1%"
       - "%clan_2% - %kills_2%"
+
+spawn-gui:
+  name: "&cChoose spawn location"
+  slots: 27

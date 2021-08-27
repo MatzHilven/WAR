@@ -19,8 +19,8 @@ public class Clan {
     private List<UUID> coLeaders;
     private List<UUID> members;
 
-    private List<UUID> invited;
-    private List<UUID> inChat;
+    private final List<UUID> invited;
+    private final List<UUID> inChat;
 
     private int wins;
     private int losses;
@@ -152,6 +152,10 @@ public class Clan {
         members.addAll(this.members);
 
         return members;
+    }
+
+    public boolean containsPlayers(Player p, Player p1) {
+        return getAll().contains(p.getUniqueId()) && getAll().contains(p1.getUniqueId());
     }
 
     @Override

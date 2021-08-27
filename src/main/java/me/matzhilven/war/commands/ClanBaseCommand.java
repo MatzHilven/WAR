@@ -3,6 +3,8 @@ package me.matzhilven.war.commands;
 import me.matzhilven.war.WARPlugin;
 import me.matzhilven.war.clan.Clan;
 import me.matzhilven.war.utils.StringUtils;
+import me.matzhilven.war.war.kit.ArmorstandKit;
+import me.matzhilven.war.war.spawns.Spawn;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -72,8 +74,16 @@ public class ClanBaseCommand implements CommandExecutor, TabExecutor {
             case 2:
                 if (args[0].equalsIgnoreCase("war")) {
                     return StringUtil.copyPartialMatches(args[1],
-                    main.getClanManager().getClans().stream().map(Clan::getName).collect(Collectors.toList()),
-                    new ArrayList<>());
+                            main.getClanManager().getClans().stream().map(Clan::getName).collect(Collectors.toList()),
+                            new ArrayList<>());
+                } else if (args[0].equalsIgnoreCase("setspawnlocation") || args[0].equalsIgnoreCase("removekit")) {
+                    return StringUtil.copyPartialMatches(args[1],
+                            main.getKitManager().getKits().stream().map(ArmorstandKit::getNameUncolorized).collect(Collectors.toList()),
+                            new ArrayList<>());
+                } else if (args[0].equalsIgnoreCase("removespawn")) {
+                    return StringUtil.copyPartialMatches(args[1],
+                            main.getSpawnManager().getSpawns().stream().map(Spawn::getNameUncolorized).collect(Collectors.toList()),
+                            new ArrayList<>());
                 }
                 cmds.addAll(Bukkit.getOnlinePlayers().stream().map(Player::getName).collect(Collectors.toList()));
                 return StringUtil.copyPartialMatches(args[1], cmds, new ArrayList<>());

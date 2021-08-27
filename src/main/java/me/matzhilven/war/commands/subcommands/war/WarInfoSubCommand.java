@@ -20,6 +20,7 @@ public class WarInfoSubCommand implements SubCommand {
     @Override
     public void onCommand(Player sender, Command command, String[] args) {
 
+
         if (main.getCurrentWar() == null) {
             StringUtils.sendMessage(sender, main.getMessages().getString("no-ongoing-war"));
             return;
