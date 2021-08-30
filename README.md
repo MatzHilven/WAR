@@ -7,4 +7,4 @@ Fully customizable Clan/Guild system with integrated Clan War
 - custom kits/war spawns system
 - kits displayed with interactable armorstands
 
-!(image)[https://imgur.com/a/YzmvsYR]
+https://imgur.com/a/YzmvsYR
