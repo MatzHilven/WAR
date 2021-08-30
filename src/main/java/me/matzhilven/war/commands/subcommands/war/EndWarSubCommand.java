@@ -4,6 +4,7 @@ import me.matzhilven.war.WARPlugin;
 import me.matzhilven.war.commands.SubCommand;
 import me.matzhilven.war.utils.StringUtils;
 import me.matzhilven.war.war.War;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 
@@ -27,6 +28,8 @@ public class EndWarSubCommand implements SubCommand {
         War war = main.getCurrentWar();
         war.end();
         StringUtils.sendMessage(sender, main.getMessages().getString("war-ended"));
+
+        Bukkit.getOnlinePlayers().forEach(player -> player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard()));
     }
 
     @Override

@@ -40,8 +40,10 @@ public class War extends BukkitRunnable {
     public War(Clan clan1, Clan clan2, int maxTime) {
         scoreboard = new JPerPlayerMethodBasedScoreboard();
 
-        team1 = scoreboard.createTeam("team1", ChatColor.DARK_BLUE + "[" + clan1.getName() + "] ");
-        team2 = scoreboard.createTeam("team2", ChatColor.DARK_RED + "[" + clan2.getName() + "] ");
+        team1 = scoreboard.createTeam("team1",
+                ChatColor.valueOf(main.getConfig().getString("war.color-1")) + "[" + clan1.getName() + "] ");
+        team2 = scoreboard.createTeam("team2",
+                ChatColor.valueOf(main.getConfig().getString("war.color-2")) + "[" + clan2.getName() + "] ");
 
         players = new ArrayList<>();
 
@@ -291,5 +293,14 @@ public class War extends BukkitRunnable {
 
     public boolean shareClan(Player player, Player player1) {
         return clan1.containsPlayers(player, player1) || clan2.containsPlayers(player, player1);
+    }
+
+    public boolean containsClan(Clan clan) {
+        return clan1 == clan || clan2 == clan;
+    }
+
+    public void removePlayer(Player player) {
+        players.remove(player);
+        scoreboard.removePlayer(player);
     }
 }

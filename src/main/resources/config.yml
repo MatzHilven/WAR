@@ -1,4 +1,6 @@
 war:
+  color-1: BLUE
+  color-2: DARK_RED
   max-kills: 10
   min-members: 1
   sidebar:

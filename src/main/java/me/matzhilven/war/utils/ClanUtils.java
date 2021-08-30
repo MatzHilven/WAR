@@ -34,6 +34,6 @@ public class ClanUtils {
             result.append(player.getName());
             result.append("&7, ");
         }
-        return result.length() > 0 ? result.substring(0, result.length() - 1) : "";
+        return result.length() > 0 ? result.substring(0, result.length() - 2) : "";
     }
 }

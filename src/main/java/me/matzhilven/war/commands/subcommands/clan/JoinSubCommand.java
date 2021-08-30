@@ -4,6 +4,7 @@ import me.matzhilven.war.WARPlugin;
 import me.matzhilven.war.clan.Clan;
 import me.matzhilven.war.commands.SubCommand;
 import me.matzhilven.war.utils.StringUtils;
+import me.matzhilven.war.war.War;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 
@@ -46,6 +47,13 @@ public class JoinSubCommand implements SubCommand {
         clan.addMember(sender);
 
         clan.getInvited().remove(sender.getUniqueId());
+
+        if (main.getCurrentWar() != null) {
+            War war = main.getCurrentWar();
+            if (war.canJoin(sender)) {
+                war.addPlayer(sender);
+            }
+        }
     }
 
     @Override

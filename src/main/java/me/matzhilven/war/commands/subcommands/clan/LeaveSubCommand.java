@@ -4,6 +4,7 @@ import me.matzhilven.war.WARPlugin;
 import me.matzhilven.war.clan.Clan;
 import me.matzhilven.war.commands.SubCommand;
 import me.matzhilven.war.utils.StringUtils;
+import me.matzhilven.war.war.War;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 
@@ -31,9 +32,17 @@ public class LeaveSubCommand implements SubCommand {
         }
 
         clan.removeMember(sender, false);
+
         StringUtils.sendMessage(sender, main.getMessages().getString("left-player")
-        .replace("%clan%", clan.getName())
+                .replace("%clan%", clan.getName())
         );
+
+        if (main.getCurrentWar() != null) {
+            War war = main.getCurrentWar();
+            if (war.containsClan(clan)) {
+                war.removePlayer(sender);
+            }
+        }
     }
 
     @Override

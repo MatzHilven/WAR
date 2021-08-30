@@ -83,7 +83,7 @@ public class PlayerListeners implements Listener {
         if (!(war.isIn(player) && war.isIn(killer))) return;
 
         war.addDeath(war.getClan(player));
-        war.addKill(war.getClan(player));
+        war.addKill(war.getClan(killer));
 
         TempPlayerData.get(player.getUniqueId()).addDeath();
         TempPlayerData.get(killer.getUniqueId()).addKill();
