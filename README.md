@@ -7,4 +7,4 @@ Fully customizable Clan/Guild system with integrated Clan War
 - custom kits/war spawns system
 - kits displayed with interactable armorstands
 
-<iframe src="https://giphy.com/embed/bcTHmbKkrgyW0iBaK7" width="480" height="270" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/bcTHmbKkrgyW0iBaK7">via GIPHY</a></p>
+https://media.giphy.com/media/bcTHmbKkrgyW0iBaK7/giphy-downsized-large.gif?cid=790b7611c5cd002f014c1a52e9cad48ff204566eea4b71c1&rid=giphy-downsized-large.gif&ct=g
