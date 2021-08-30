@@ -56,6 +56,7 @@ public class SpawnManager {
         main.getSpawns().set("spawns." + s.getNameUncolorized() + ".lore", s.getLore());
         main.getSpawns().set("spawns." + s.getNameUncolorized() + ".location", ConfigUtils.toString(s.getLocation()));
         main.getSpawns().set("spawns." + s.getNameUncolorized() + ".icon", s.getIcon().toString());
+        main.getSpawns().set("spawns." + s.getNameUncolorized() + ".slot", s.getSlot());
         main.saveSpawns();
     }
 

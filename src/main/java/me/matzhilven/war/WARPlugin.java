@@ -84,6 +84,7 @@ public final class WARPlugin extends JavaPlugin {
 
         if (currentWar != null) {
             currentWar.end();
+            Bukkit.getOnlinePlayers().forEach(player -> player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard()));
         }
     }
 
